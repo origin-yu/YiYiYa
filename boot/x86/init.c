@@ -513,11 +513,15 @@ void start_kernel() {
   asm volatile("movl %0, %%gs" : : "r"(GDT_ENTRY_32BIT_DS * GDT_SIZE));
   asm volatile("movl %0, %%fs" : : "r"(GDT_ENTRY_32BIT_FS * GDT_SIZE));
   // print_string("load kernel\n\r");
+  // 加载内核，获得内核入口
   boot_info->kernel_entry = load_kernel();
   entry start = boot_info->kernel_entry;
+  // 参数
   int argc = 0;
   char** argv = 0;
   char* envp[10];
+  // 将收集到的硬件信息传递给内核
   envp[0] = boot_info;
+  // 转至内核
   start(argc, argv, envp);
 }
